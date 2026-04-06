@@ -55,10 +55,15 @@ class DataTransformation:
 
         try:
             dataframe = self.get_data(feature_store_file_path=self.feature_store_file_path)
-            X=dataframe.drop(columns= TARGET_COLUMN)
+            X=dataframe.drop(columns= [TARGET_COLUMN , "wafer_id"])
             y= np.where(dataframe[TARGET_COLUMN]==-1,0,1)
             X_train,X_test,y_train,y_test = train_test_split(X,y,test_size=0.2, random_state=42)
             preprocessor = self.get_data_transformer_object()
+
+            #print("Data types:\n", X_train.dtypes)
+            #print("Any nulls:\n", X_train.isnull().sum())
+            #print("Sample data:\n", X_train.head())
+
             X_train_scaled = preprocessor.fit_transform(X_train)
             X_test_scaled = preprocessor.transform(X_test)
 
